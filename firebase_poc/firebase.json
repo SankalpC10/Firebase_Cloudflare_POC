@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "https://www.alphantech.fyi/"
+      },
+      {
+        "source": "/posts/**",
+        "destination": "https://www.alphantech.fyi/posts/**"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
