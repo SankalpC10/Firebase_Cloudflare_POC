@@ -10,35 +10,43 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const path = location.pathname.toLowerCase();
-    
-    if (path.includes('/loggedin')) {
-      setIsLoggedIn(true);
-      navigate('/login');
-    } else if (path.includes('/logout')) {
-      setIsLoggedIn(false);
-      navigate('/logout');
-    }
-  }, [location, navigate]);
+    const queryParams = new URLSearchParams(location.search);
+    const loginStatus = queryParams.get('login');
 
-  const toggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-    if (isLoggedIn) {
-      navigate('/logout');
-    } else {
-      navigate('/loggedin');
+    if (loginStatus === 'true') {
+      setIsLoggedIn(true);
+    } else if (loginStatus === 'false') {
+      setIsLoggedIn(false);
     }
+  }, [location]);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    navigate('/?login=true');
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate('/?login=false');
   };
 
   return (
     <div className="App">
-      {!isLoggedIn && (
-        <button onClick={toggleLogin}>
-          Log In
-        </button>
+      {isLoggedIn ? (
+        <>
+          <button onClick={handleLogout}>
+            Log Out
+          </button>
+          <Firebaseapp />
+        </>
+      ) : (
+        <>
+          <button onClick={handleLogin}>
+            Log In
+          </button>
+          <HugoMicroFrontend />
+        </>
       )}
-
-      {isLoggedIn ? <Firebaseapp /> : <HugoMicroFrontend />}
     </div>
   );
 }
