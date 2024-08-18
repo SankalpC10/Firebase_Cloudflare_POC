@@ -9,36 +9,52 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const path = location.pathname.toLowerCase();
-    
-    if (path.includes('/loggedin')) {
-      setIsLoggedIn(true);
-      navigate('/login');
-    } else if (path.includes('/logout')) {
-      setIsLoggedIn(false);
-      navigate('/logout');
-    }
-  }, [location, navigate]);
+  const marketingSiteRoutes = ['/about', '/posts', '/home'];
 
-  const toggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-    if (isLoggedIn) {
-      navigate('/logout');
-    } else {
-      navigate('/loggedin');
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const loginStatus = queryParams.get('login');
+
+    if (loginStatus === 'true') {
+      setIsLoggedIn(true);
+    } else if (loginStatus === 'false') {
+      setIsLoggedIn(false);
     }
+  }, [location]);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    navigate('/?login=true');
   };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate('/?login=false');
+  };
+
+  const shouldShowMarketingSite = marketingSiteRoutes.some(route => 
+    location.pathname.startsWith(route)
+  );
 
   return (
     <div className="App">
-      {!isLoggedIn && (
-        <button onClick={toggleLogin}>
-          Log In
-        </button>
+      {shouldShowMarketingSite ? (
+        <HugoMicroFrontend />
+      ) : isLoggedIn ? (
+        <>
+          <button onClick={handleLogout}>
+            Log Out
+          </button>
+          <Firebaseapp />
+        </>
+      ) : (
+        <>
+          <button onClick={handleLogin}>
+            Log In
+          </button>
+          <HugoMicroFrontend />
+        </>
       )}
-
-      {isLoggedIn ? <Firebaseapp /> : <HugoMicroFrontend />}
     </div>
   );
 }
