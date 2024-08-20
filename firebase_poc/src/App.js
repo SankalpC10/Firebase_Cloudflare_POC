@@ -31,10 +31,18 @@ function App() {
 
   const handleIframeNavigation = (event) => {
     // Ensure the message is from your marketing subdomain
+    console.log(event)
     if (event.origin === "https://marketing.alphantech.fyi") {
       const path = event.data.path;
       // Update the browser URL without reloading the page
       window.history.pushState(null, '', path);
+      if (event.data.type === 'navigation') {
+        // Update parent URL
+        window.history.pushState(null, '', event.data.path);
+      } else if (event.data.type === 'externalNavigation') {
+        // Handle external link navigation
+        window.open(event.data.url, '_blank');
+      }
     }
   };
 
