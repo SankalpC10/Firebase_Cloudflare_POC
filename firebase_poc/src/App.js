@@ -9,7 +9,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const marketingSiteRoutes = ['/about', '/posts/*', '/home'];
+  const marketingRoutes = ['/about', '/posts', '/home'];
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -20,7 +20,23 @@ function App() {
     } else if (loginStatus === 'false') {
       setIsLoggedIn(false);
     }
+
+    // Listen for messages from the iframe
+    window.addEventListener('message', handleIframeNavigation);
+
+    return () => {
+      window.removeEventListener('message', handleIframeNavigation);
+    };
   }, [location]);
+
+  const handleIframeNavigation = (event) => {
+    // Ensure the message is from your marketing subdomain
+    if (event.origin === "https://marketing.alphantech.fyi") {
+      const path = event.data.path;
+      // Update the browser URL without reloading the page
+      window.history.pushState(null, '', path);
+    }
+  };
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -32,26 +48,22 @@ function App() {
     navigate('/?login=false');
   };
 
-  const shouldShowMarketingSite = marketingSiteRoutes.some(route => 
+  const shouldShowMarketingContent = marketingRoutes.some(route => 
     location.pathname.startsWith(route)
   );
 
   return (
     <div className="App">
-      {shouldShowMarketingSite ? (
+      {shouldShowMarketingContent ? (
         <HugoMicroFrontend />
       ) : isLoggedIn ? (
         <>
-          <button onClick={handleLogout}>
-            Log Out
-          </button>
+          <button onClick={handleLogout}>Log Out</button>
           <Firebaseapp />
         </>
       ) : (
         <>
-          <button onClick={handleLogin}>
-            Log In
-          </button>
+          <button onClick={handleLogin}>Log In</button>
           <HugoMicroFrontend />
         </>
       )}
