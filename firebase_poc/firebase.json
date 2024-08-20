@@ -8,22 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/",
-        "destination": "https://www.alphantech.fyi/"
-      },
-      {
-        "source": "/posts/**",
-        "destination": "https://www.alphantech.fyi/posts/**"
-      },
-      {
-        "source": "/about/**",
-        "destination": "https://www.alphantech.fyi/about/**"
-      },
-      {
-        "source": "/home",
-        "destination": "https://www.alphantech.fyi/home/**"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
