@@ -9,7 +9,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const marketingSiteRoutes = ['/about', '/posts', '/home'];
+  const marketingSiteRoutes = ['/about', '/posts/*', '/home'];
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
