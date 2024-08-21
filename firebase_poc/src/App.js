@@ -41,6 +41,7 @@ function App() {
         window.history.pushState(null, '', event.data.path);
       } else if (event.data.type === 'externalNavigation') {
         // Handle external link navigation
+        event.preventDefault();
         window.open(event.data.url, '_blank');
       }
     }
